@@ -29,10 +29,11 @@ The pipeline consists of two main stages:
 
 * **MATLAB:** Including the Image Processing Toolbox.
 * **FreeSurfer:** Requires `recon-all` output directories and the `mri_convert` tool available in the system PATH.
-* **NIfTI MATLAB Toolbox:** For reading/writing NIfTI files. Path configuration required in scripts.
-* **`bwdistsc` MATLAB function:** Custom anisotropic distance transform. Path configuration required.
-* **RegionGrowing24 Executable:** External tool for local maxima detection. Path configuration required.
-* **(Optional) SGE Cluster:** The provided `submit_*.sh` scripts are configured for Sun Grid Engine. Adaptation is needed for other schedulers (Slurm, LSF, PBS) or local execution.
+* **RegionGrowing24 Executable:** Provided in the `bin/` directory of this repository.
+    * **Note:** The provided executable might be specific to a certain OS (e.g., Linux). If it doesn't run on your system, you may need to compile it from source (source not provided here).
+* **`bwdistsc` MATLAB function:** This custom function for anisotropic distance transform must be available to MATLAB.
+* **NIfTI MATLAB Toolbox:** Required for reading/writing NIfTI files. 
+* **(Optional) SGE Cluster:** 🖥️ The provided `submit_*.sh` scripts are configured for Sun Grid Engine. Adaptation is needed for other schedulers (Slurm, LSF, PBS) or local execution.
 
 ---
 
@@ -83,6 +84,18 @@ The pipeline consists of two main stages:
 
 Adapt the scripts by hardcoding the `datasetID` variable and removing `exit()` calls for interactive/single-subject execution. Run Stage A first, then Stage B.
 
+To run the pipeline for a single subject directly in MATLAB without using the cluster submission scripts:
+
+1.  **Adapt `StageA_GenerateVolumes/-git.m`**:
+    * Find the line `datasetID = getenv('JOB_SUBJECT_ID');`.
+    * Comment out this line by adding a `%` at the beginning: `% datasetID = getenv('JOB_SUBJECT_ID');`.
+    * Add a new line below it to define the subject ID directly, replacing `'YourSubjectIDHere'` with the actual folder name of your subject: `datasetID = 'YourSubjectIDHere';`.
+    * (Optional) For interactive debugging, you might also want to comment out the `exit(0);` and `exit(1);` lines near the end of the main function and its `catch` block.
+2.  **Run `StageA_GenerateVolumes_git.m`** in MATLAB.
+3.  **Adapt `StageB_CalculateMetrics_git.m`**:
+    * Apply the same modifications as in Stage A: comment out the `getenv` line, add a line to hardcode the same `datasetID`, and optionally comment out the `exit()` calls.
+4.  **Run `StageB_CalculateMetrics_git.m`** in MATLAB after Stage A has finished successfully for that subject.
+
 ### Output
 
 * **Intermediate files:** Stored within each subject's directory.
@@ -91,14 +104,17 @@ Adapt the scripts by hardcoding the `datasetID` variable and removing `exit()` c
 
 ---
 
-## File Descriptions
+## 📚 File Descriptions
 
 * `StageA_GenerateVolumes2.m`: Stage 1 script - generates intermediate volumes.
 * `StageB_CalculateMetrics.m`: Stage 2 script - calculates metrics.
 * `submit_stage_A.sh`: Example SGE submission script for Stage A.
 * `submit_stage_B.sh`: Example SGE submission script for Stage B.
-* `subject_list.txt` (User-created): List of subject IDs.
-
+* `bin/RegionGrowing24`: Pre-compiled executable for local maxima detection (used by Stage A). *(Adjust path if placed elsewhere)*
+* `subject_list_TEMPLATE.txt`: Template file showing the format for listing subject IDs (one per line). Rename to `subject_list.txt` and populate with your subject IDs.
+* `helper_functions/bwdistsc.m`: Custom anisotropic distance transform function.
+* `LICENSE.md`: *(Add this line after creating the file)* Defines the permissions and limitations for using this code.
+* `.gitignore`: *(Add this line after creating the file)* Specifies files intentionally untracked by Git (e.g., logs, results).
 ---
 
 ## 📜 License
