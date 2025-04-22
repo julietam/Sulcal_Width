@@ -116,6 +116,22 @@ To run the pipeline for a single subject directly in MATLAB without using the cl
 * `LICENSE.md`: *(Add this line after creating the file)* Defines the permissions and limitations for using this code.
 * `.gitignore`: *(Add this line after creating the file)* Specifies files intentionally untracked by Git (e.g., logs, results).
 ---
+## 🌳 Repository Structure
+
+```text
+.
+├── bin/
+│   └── RegionGrowing24         # Executable dependency
+├── helper_functions/
+│   └── bwdistsc.m              # Custom distance function
+├── StageA_GenerateVolumes2.m     # Stage 1 script
+├── StageB_CalculateMetrics.m     # Stage 2 script
+├── submit_stage_A.sh           # Stage 1 submission script template
+├── submit_stage_B.sh           # Stage 2 submission script template
+├── subject_list_TEMPLATE.txt   # Example subject list
+├── LICENSE.md                  # License file (You need to create this)
+├── README.md                   # This file
+└── .gitignore                  # Git ignore file (You need to create this)
 
 ## 📜 License
 
