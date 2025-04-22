@@ -78,18 +78,16 @@ The pipeline is divided into two main stages:
 Ensure your data is organized as follows:
 
 <config.rootFolder>/
-├── <SubjectID_1>/  (FreeSurfer output dir)
-│   ├── mri/
-│   │   ├── brain.nii
-│   │   └── ribbon.nii
-│   │   └── ... (other FS files)
-│   ├── labels/
-│   │   ├── lh.your_label.label.nii
-│   │   └── rh.your_label.label.nii
-│   │   └── ... (other FS label files)
-│   └── ... (other FS dirs)
-├── <SubjectID_2>/
-│   └── ...
+└── <SubjectID_1>/             # FreeSurfer output directory
+├── mri/
+│   ├── brain.nii       # Essential input for Stage A
+│   └── ribbon.nii      # Used by helper functions
+├── labels/
+│   ├── lh..label.nii  # Example label file needed by Stage A
+│   └── rh..label.nii  # Example label file needed by Stage A
+└── (other FreeSurfer directories/files)
+└── <SubjectID_2>/
+└── ...
 └── ...
 
 
@@ -142,8 +140,6 @@ You can adapt the MATLAB scripts to run for a single subject without a cluster:
 ## License
 
 MIT
-
-## Citation
 
 ## Citation
 
